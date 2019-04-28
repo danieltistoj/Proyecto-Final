@@ -11,6 +11,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -25,8 +26,12 @@ public class Menu {
     private JFrame ventana;
     private JPanel panel;
     private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Puntos_asg, Otros,Lista_eqp,Informacion;
-    private int Canti_eqp;
+    private int Canti_eqp=0;
+    private Lista lista_eqp1, lista_partidos;
     public Menu(){
+        //Inicializar listas
+        lista_eqp1 = new Lista(); // lista de los equipos de la liga
+        lista_partidos = new Lista(); // lista con todos los partidos
         
         //BOTONES DE DESPLIEGUE DE PARAMETROS DEL PROGRAMA
         Lista_eqp = new JButton("Lista De Los Equipos");
@@ -117,14 +122,45 @@ public class Menu {
                     DesplegarBotonesOtros();
             }
         });
+        
+        //CONFIGURACION "CANTIDAD DE EQUIPOS
+        Configurar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               if(Canti_eqp==0){
+                   Canti_eqp = Integer.parseInt(JOptionPane.showInputDialog("Ingrese cuantos equipos quiere en la liga"));
+               }
+               else{
+                    JOptionPane.showMessageDialog(null,"El numero de discos debe ser distinto de 0","Error",JOptionPane.ERROR_MESSAGE);  
+               }
+            }
+        });
+          //fin boton
           
+          Informacion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 JOptionPane.showMessageDialog(null,"1) Equipo ganador se le suma tres puntos \n"+"2) Al equipo que pierde no se le dan puntos\n"+"3) A los esquipos que empatan se les da un punto\n"+
+                         "4) Cada equipo debe de enfrentarce con cada uno de los demas equipos"
+                         ,"Informacion",JOptionPane.INFORMATION_MESSAGE); 
+            }
+        });
+          
+          //Ingresar equipos
+          Ingreso_eqp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              IngresarEquipos();
+            }
+        });
+          //fin de boton
         ventana.add(panel);
         ventana.setVisible(true);
     }
     
     public void DesplegarBotonesOtros(){
       if(next_boton2==false){
-                    next_boton2 = true;
+                   next_boton2 = true;
                    Ingreso_eqp.setBounds(200, 390, 225, 30);
                    Ingreso_resul.setBounds(200,450 , 225, 30);
                    Mostrar_ClsG.setBounds(200,510 , 225, 30);
@@ -145,5 +181,28 @@ public class Menu {
                    panel.repaint();
                     
                 }   
+    }
+    
+    public void IngresarEquipos(){
+        if(lista_eqp1.Vacia()&&Canti_eqp!=0){
+            int conta = 1;
+            while(conta<=Canti_eqp){
+                String nombre_eqp = JOptionPane.showInputDialog(null, "Ingrese el nombre del equipo "+conta);
+                Equipo nuevo_equipo = new Equipo();
+                nuevo_equipo.setNombre(nombre_eqp);
+                Nodo nuevo_nodo = new Nodo();
+                nuevo_nodo.setEquipo(nuevo_equipo);
+                lista_eqp1.InsertarFondo(nuevo_nodo);    
+                conta++;
+            }
+        }
+        else{
+            if(Canti_eqp==0){
+               JOptionPane.showMessageDialog(null,"Aun no se ha ingresado la cantidad de equipos","Error",JOptionPane.ERROR_MESSAGE);  
+            }
+            if(lista_eqp1.Vacia()==false){
+           JOptionPane.showMessageDialog(null,"Ya se han ingresado los equipos","Error",JOptionPane.ERROR_MESSAGE); 
+            }
+        }
     }
 }

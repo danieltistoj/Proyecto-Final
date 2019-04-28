@@ -122,8 +122,32 @@ public class Lista {
         }
     }
     */
+
+    public Nodo getTope() {
+        return tope;
+    }
+
+    public void setTope(Nodo tope) {
+        this.tope = tope;
+    }
+
+    public Nodo getFondo() {
+        return fondo;
+    }
+
+    public void setFondo(Nodo fondo) {
+        this.fondo = fondo;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
     
-    
+   
     public boolean Vacia(){
         return(fondo==null)?true:false;
     }

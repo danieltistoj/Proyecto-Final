@@ -10,9 +10,17 @@ package liga.de.futbol;
  * @author Usuario
  */
 public class Equipo {
-   private int puntos, GolesAfavor, GolesEncontra;
+   private int puntos = 0, GolesAfavor = 0, GolesEncontra = 0, num_referencia = 0;
    private String nombre;
 
+    public int getNum_referencia() {
+        return num_referencia;
+    }
+
+    public void setNum_referencia(int num_referencia) {
+        this.num_referencia = num_referencia;
+    }
+ 
     public int getPuntos() {
         return puntos;
     }
