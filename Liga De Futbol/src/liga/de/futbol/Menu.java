@@ -21,17 +21,28 @@ import javax.swing.border.LineBorder;
  * @author Usuario
  */
 public class Menu {
-    boolean next_botones=false;
-    JFrame ventana;
-    JPanel panel;
-    JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Puntos_asg, Otros;
+    private boolean next_botones=false,next_boton2=false;
+    private JFrame ventana;
+    private JPanel panel;
+    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Puntos_asg, Otros,Lista_eqp,Informacion;
+    private int Canti_eqp;
     public Menu(){
+        
         //BOTONES DE DESPLIEGUE DE PARAMETROS DEL PROGRAMA
+        Lista_eqp = new JButton("Lista De Los Equipos");
+        Lista_eqp.setBounds(400, 270, 225, 30);
+        
+        Informacion = new JButton("Informacion");
+        Informacion.setBounds(400, 330, 225, 30);
+        
         Configurar = new JButton("Configurar 'Cantidad De Equipos'");
         Configurar.setBounds(300, 90, 225, 30);
          
-        Puntos_asg = new JButton("Mostrar Clasificacion general");
+        Puntos_asg = new JButton("Puntos Asignados");
         Puntos_asg.setBounds(300, 150, 225, 30);
+        
+        Otros = new JButton("Otros");
+        Otros.setBounds(300,210 ,225, 30);
         
         //BOTONE PRINCIPALES
         
@@ -41,7 +52,7 @@ public class Menu {
         Ingreso_eqp = new JButton("Ingreso De Los Equipos");
         Ingreso_eqp.setBounds(200, 90, 225, 30);
         
-        Ingreso_resul =  new JButton("Ingrese De Resultados");
+        Ingreso_resul =  new JButton("Ingreso De Resultados");
         Ingreso_resul.setBounds(200, 150, 225, 30);
         
         Mostrar_ClsG = new JButton("Mostrar Clasificacion General");
@@ -50,7 +61,7 @@ public class Menu {
         // FIN BOTOS PRINCIPALES
         
         panel = new JPanel();
-        panel.setBounds(0, 0, 600, 500);
+        panel.setBounds(0, 0, 700, 600);
         panel.setLayout(null);
         panel.setVisible(true);
         panel.add(Parametro_prog);
@@ -60,7 +71,7 @@ public class Menu {
        
         
         ventana = new JFrame("Liga De Futbol");
-        ventana.setSize(600, 500);
+        ventana.setSize(700, 600);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLocationRelativeTo(null);
         ventana.setLayout(null);
@@ -71,30 +82,68 @@ public class Menu {
             public void actionPerformed(ActionEvent e) {
                if(next_botones==false){
                    next_botones = true;
-                   Ingreso_eqp.setBounds(200, 210, 225, 30);
-                   Ingreso_resul.setBounds(200, 270, 225, 30);
-                   Mostrar_ClsG.setBounds(200, 330, 225, 30);
+                   Ingreso_eqp.setBounds(200, 270, 225, 30);
+                   Ingreso_resul.setBounds(200,330 , 225, 30);
+                   Mostrar_ClsG.setBounds(200,390 , 225, 30);
                    
                      panel.add(Configurar);
                      panel.add(Puntos_asg);
+                     panel.add(Otros);
                      panel.repaint();
                      
                }
                else{
+                  
                    next_botones = false;
+                   if(next_botones == false){
+                       next_boton2 = true;
+                   }
+                   DesplegarBotonesOtros();
                    panel.remove(Configurar);
                    panel.remove(Puntos_asg);
+                   panel.remove(Otros);
                    Ingreso_eqp.setBounds(200, 90, 225, 30);
                    Ingreso_resul.setBounds(200, 150, 225, 30);
                    Mostrar_ClsG.setBounds(200, 210, 225, 30);
                    panel.repaint();
+                   
                }
             }
         });
         
+        Otros.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    DesplegarBotonesOtros();
+            }
+        });
           
         ventana.add(panel);
         ventana.setVisible(true);
     }
     
+    public void DesplegarBotonesOtros(){
+      if(next_boton2==false){
+                    next_boton2 = true;
+                   Ingreso_eqp.setBounds(200, 390, 225, 30);
+                   Ingreso_resul.setBounds(200,450 , 225, 30);
+                   Mostrar_ClsG.setBounds(200,510 , 225, 30);
+                   
+                     panel.add(Lista_eqp);
+                     panel.add(Informacion);
+                     panel.repaint();
+                    
+                }
+                else{
+                   next_boton2 = false;
+                   
+                   panel.remove(Lista_eqp);
+                   panel.remove(Informacion);  
+                   Ingreso_eqp.setBounds(200, 270, 225, 30);
+                   Ingreso_resul.setBounds(200, 330, 225, 30);
+                   Mostrar_ClsG.setBounds(200, 390, 225, 30);
+                   panel.repaint();
+                    
+                }   
+    }
 }
