@@ -10,8 +10,17 @@ package liga.de.futbol;
  * @author Usuario
  */
 public class Nodo {
-    Equipo equipo;
-    Nodo sig, ant;
+   private  Equipo equipo;
+   private  Nodo sig, ant;
+   private Partido partido;
+
+    public Partido getPartido() {
+        return partido;
+    }
+
+    public void setPartido(Partido partido) {
+        this.partido = partido;
+    }
 
     public Equipo getEquipo() {
         return equipo;

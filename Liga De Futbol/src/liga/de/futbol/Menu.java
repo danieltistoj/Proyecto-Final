@@ -9,10 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -23,12 +27,51 @@ import javax.swing.border.LineBorder;
  */
 public class Menu {
     private boolean next_botones=false,next_boton2=false;
-    private JFrame ventana;
-    private JPanel panel;
-    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Puntos_asg, Otros,Lista_eqp,Informacion;
+    private JList lista;
+    private JScrollPane scrollLista;
+    private JFrame ventana, ventana2;
+    private JPanel panel, panel2;
+    private DefaultListModel modelo;//declaramos el Modelo
+    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Informacion,Atras,Gresultados;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
+    private Nodo auxiiar;
+    private int jornada=0, PartidosPorJornada;
+    
     public Menu(){
+        
+        Gresultados = new JButton("Generar Resultados");
+        Gresultados.setBounds(450,0, 150,30);
+          
+        Atras = new JButton("Atras");
+        Atras.setBounds(0,0, 70,30);
+        
+        lista = new JList();
+        lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+        //inicializar scroll*
+        scrollLista = new JScrollPane();//es para hacer una barra que pueda bajar para hacer y ver la lista completa...
+        scrollLista.setBounds(0,30,600, 370);
+        scrollLista.setViewportView(lista);  
+        //inicializar el modelo
+        modelo = new DefaultListModel();
+        
+        panel2 = new JPanel();
+        panel2.setBounds(0, 0,600,400);
+        panel2.setBackground(java.awt.Color.WHITE);
+        panel2.setLayout(null);
+        panel2.setVisible(true);
+        panel2.add(scrollLista);
+        panel2.add(Atras);
+        panel2.add(Gresultados);
+        
+        ventana2 = new JFrame();
+        ventana2.setSize(600, 400);
+        ventana2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana2.setLocationRelativeTo(null);
+        ventana2.setLayout(null);
+        ventana2.add(panel2);
+        ventana2.setResizable(false);
+       
         //Inicializar listas
         lista_eqp1 = new Lista(); // lista de los equipos de la liga
         lista_partidos = new Lista(); // lista con todos los partidos
@@ -43,8 +86,8 @@ public class Menu {
         Configurar = new JButton("Configurar 'Cantidad De Equipos'");
         Configurar.setBounds(300, 90, 225, 30);
          
-        Puntos_asg = new JButton("Puntos Asignados");
-        Puntos_asg.setBounds(300, 150, 225, 30);
+        Generar_partidos= new JButton("Generar Partios");
+        Generar_partidos.setBounds(300, 150, 225, 30);
         
         Otros = new JButton("Otros");
         Otros.setBounds(300,210 ,225, 30);
@@ -92,7 +135,7 @@ public class Menu {
                    Mostrar_ClsG.setBounds(200,390 , 225, 30);
                    
                      panel.add(Configurar);
-                     panel.add(Puntos_asg);
+                     panel.add(Generar_partidos);
                      panel.add(Otros);
                      panel.repaint();
                      
@@ -105,7 +148,7 @@ public class Menu {
                    }
                    DesplegarBotonesOtros();
                    panel.remove(Configurar);
-                   panel.remove(Puntos_asg);
+                   panel.remove(Generar_partidos);
                    panel.remove(Otros);
                    Ingreso_eqp.setBounds(200, 90, 225, 30);
                    Ingreso_resul.setBounds(200, 150, 225, 30);
@@ -128,10 +171,16 @@ public class Menu {
             @Override
             public void actionPerformed(ActionEvent e) {
                if(Canti_eqp==0){
-                   Canti_eqp = Integer.parseInt(JOptionPane.showInputDialog("Ingrese cuantos equipos quiere en la liga"));
+                   Canti_eqp = Integer.parseInt(JOptionPane.showInputDialog("Ingrese cuantos equipos quiere en la liga")); // solicita la contidad de equipos
+                   if(Canti_eqp%2==0){
+                       PartidosPorJornada = Canti_eqp/2;
+                   }
+                   else{
+                       PartidosPorJornada = (Canti_eqp-1)/(2);
+                   }
                }
                else{
-                    JOptionPane.showMessageDialog(null,"El numero de discos debe ser distinto de 0","Error",JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(null,"Ya se han ingresado la cantidad de equipos","Error",JOptionPane.ERROR_MESSAGE);  
                }
             }
         });
@@ -154,9 +203,55 @@ public class Menu {
             }
         });
           //fin de boton
+          //generar partidos sin resultados 
+         Generar_partidos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               if(lista_eqp1.Vacia()){
+                  JOptionPane.showMessageDialog(null,"No se han creado aun los equipos","Error",JOptionPane.ERROR_MESSAGE);  
+               }
+               else{
+                   FormarPartidos();
+               }
+            }
+        });
+         //fin del boton de generar partidos 
+           
+         
+       Lista_eqp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              ventana.setVisible(false);
+              ventana2.setVisible(true);
+               
+            }
+        });
+       
+       Atras.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventana2.setVisible(false);
+                ventana.setVisible(true);
+            }
+        });
+          
+       Gresultados.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int conta=1;
+                String cadena;
+                while(conta<=PartidosPorJornada){
+                    cadena = auxiiar.getPartido().getEqp1().getEquipo().getNombre()+" vs "+auxiiar.getPartido().getEqp2().getEquipo().getNombre();
+                    //auxiiar = auxiiar.getSig();
+                    conta++;
+                }
+            }
+        });
+       
+          //fin
         ventana.add(panel);
         ventana.setVisible(true);
-    }
+    }// fin de la funcion constructor 
     
     public void DesplegarBotonesOtros(){
       if(next_boton2==false){
@@ -182,27 +277,56 @@ public class Menu {
                     
                 }   
     }
-    
+    //boton para ingresar los equipos
     public void IngresarEquipos(){
-        if(lista_eqp1.Vacia()&&Canti_eqp!=0){
+        if(lista_eqp1.Vacia()&&Canti_eqp!=0){//verifica que la lista este vacia y que ya se haya ingresado una cantidad de equipos al sistema
             int conta = 1;
-            while(conta<=Canti_eqp){
-                String nombre_eqp = JOptionPane.showInputDialog(null, "Ingrese el nombre del equipo "+conta);
-                Equipo nuevo_equipo = new Equipo();
-                nuevo_equipo.setNombre(nombre_eqp);
-                Nodo nuevo_nodo = new Nodo();
-                nuevo_nodo.setEquipo(nuevo_equipo);
-                lista_eqp1.InsertarFondo(nuevo_nodo);    
-                conta++;
+            while(conta<=Canti_eqp){ // el ciclo ira de uno a la cantidad de equipos ingresados 
+                String nombre_eqp = JOptionPane.showInputDialog(null, "Ingrese el nombre del equipo "+conta); // se despliega una ventana emergente que pide los nombre de cada equipo
+                Equipo nuevo_equipo = new Equipo(); // se crea un nuevo objeto equipo
+                nuevo_equipo.setNombre(nombre_eqp); // se ingresa el nombre del equipo al objeto equipo
+                Nodo nuevo_nodo = new Nodo(); // se crea un nuevo nodo que servira para agregarlo a la lista equipos
+                nuevo_nodo.setEquipo(nuevo_equipo);// se ingresa el equipo al nodo
+                lista_eqp1.InsertarFondo(nuevo_nodo);    // se inserta el nodo a la lista equipos 
+                conta++; // se aumenta el contador 1
+                //esto se repite hasta que se acaba con la cantidad de equipos ingresados 
             }
+          JOptionPane.showMessageDialog(null,"Ya se han ingresado los equipos al sistema","Informacion",JOptionPane.INFORMATION_MESSAGE); // mensaje de finalizacion de ciclo
         }
         else{
-            if(Canti_eqp==0){
+            if(Canti_eqp==0){ // en dado caso el usuario no a ingresado contidad de equipos no se podrian crear los equipos 
                JOptionPane.showMessageDialog(null,"Aun no se ha ingresado la cantidad de equipos","Error",JOptionPane.ERROR_MESSAGE);  
             }
-            if(lista_eqp1.Vacia()==false){
+            if(lista_eqp1.Vacia()==false){ // si la lista no esta vacia no se podran crear mas equipos 
            JOptionPane.showMessageDialog(null,"Ya se han ingresado los equipos","Error",JOptionPane.ERROR_MESSAGE); 
             }
         }
+    }
+    
+    public void FormarPartidos(){
+        Nodo aux = lista_eqp1.getTope(), aux2;
+        while(aux!=null){
+            aux2 = aux.getSig();
+            while(aux2!=null){
+                Partido nuevo_partido = new Partido();
+                nuevo_partido.setEqp1(aux);
+                nuevo_partido.setEqp2(aux2);
+                Nodo nodo_partido = new Nodo();
+                nodo_partido.setPartido(nuevo_partido);
+                lista_partidos.InsertarFondo(nodo_partido);
+                aux2 = aux2.getSig();
+                
+                
+            }
+            aux = aux.getSig();
+            
+        }
+        Nodo aux3 = lista_partidos.getTope();
+        while(aux3!=null){
+            System.out.println(aux3.getPartido().getEqp1().getEquipo().getNombre()+" vs "+aux3.getPartido().getEqp2().getEquipo().getNombre());
+            aux3 = aux3.getSig();
+        }
+     JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Mensaje",JOptionPane.INFORMATION_MESSAGE); 
+        
     }
 }
