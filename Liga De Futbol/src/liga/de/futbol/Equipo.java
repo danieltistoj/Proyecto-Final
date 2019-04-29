@@ -26,7 +26,7 @@ public class Equipo {
     }
 
     public void setPuntos(int puntos) {
-        this.puntos = puntos;
+        this.puntos += puntos;
     }
 
     public int getGolesAfavor() {
@@ -34,7 +34,7 @@ public class Equipo {
     }
 
     public void setGolesAfavor(int GolesAfavor) {
-        this.GolesAfavor = GolesAfavor;
+        this.GolesAfavor += GolesAfavor;
     }
 
     public int getGolesEncontra() {
@@ -42,7 +42,7 @@ public class Equipo {
     }
 
     public void setGolesEncontra(int GolesEncontra) {
-        this.GolesEncontra = GolesEncontra;
+        this.GolesEncontra += GolesEncontra;
     }
 
     public String getNombre() {

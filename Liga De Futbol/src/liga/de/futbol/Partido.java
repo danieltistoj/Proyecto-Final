@@ -13,7 +13,7 @@ import javax.swing.JButton;
  */
 public class Partido {
   private Nodo Eqp1, Eqp2;
-  private int goles_eqp1, goles_eqp2;
+  private int goles_eqp1,goles_eqp2;
 
     public Nodo getEqp1() {
         return Eqp1;
@@ -46,7 +46,28 @@ public class Partido {
     public void setGoles_eqp2(int goles_eqp2) {
         this.goles_eqp2 = goles_eqp2;
     }
+    
 
+ public void GenerarGoles(){
+     goles_eqp1 = (int) (Math.random() * 5) + 1;
+     goles_eqp2 = (int) (Math.random() * 5) + 1;
+     Eqp1.getEquipo().setGolesAfavor(goles_eqp1);
+     Eqp2.getEquipo().setGolesAfavor(goles_eqp2);
+     if(goles_eqp1>goles_eqp2){
+         Eqp1.getEquipo().setPuntos(3);
+     }
+     if(goles_eqp1<goles_eqp2){
+         Eqp2.getEquipo().setPuntos(3);
+     }
+     if(goles_eqp1==goles_eqp2){
+         Eqp2.getEquipo().setPuntos(1);
+         Eqp1.getEquipo().setPuntos(1);
+     }
+      Eqp1.getEquipo().setGolesEncontra(goles_eqp2);
+      Eqp2.getEquipo().setGolesEncontra(goles_eqp1);
+    
+ }
+    
     
    
 }

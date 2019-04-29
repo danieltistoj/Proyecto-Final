@@ -36,7 +36,7 @@ public class Menu {
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
     private Nodo auxiiar;
-    private int jornada=0, PartidosPorJornada;
+    private int jornada=1, PartidosPorJornada;
     
     public Menu(){
         
@@ -221,8 +221,9 @@ public class Menu {
        Lista_eqp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              ventana.setVisible(false);
-              ventana2.setVisible(true);
+  
+    JScrollPane scrollPane = new JScrollPane ();
+    JOptionPane.showMessageDialog (ventana, scrollPane);
                
             }
         });
@@ -234,16 +235,35 @@ public class Menu {
                 ventana.setVisible(true);
             }
         });
+       
+       Ingreso_resul.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              ventana.setVisible(false);
+              ventana2.setVisible(true);
+            }
+        });
           
        Gresultados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(auxiiar!=null){
                 int conta=1;
-                String cadena;
+                String cadena, cadena2;
+                cadena2 = "Jornada "+jornada;
+                modelo.addElement(cadena2);
                 while(conta<=PartidosPorJornada){
-                    cadena = auxiiar.getPartido().getEqp1().getEquipo().getNombre()+" vs "+auxiiar.getPartido().getEqp2().getEquipo().getNombre();
-                    //auxiiar = auxiiar.getSig();
+                    auxiiar.getPartido().GenerarGoles();
+                    cadena2 = "Jornada "+jornada;
+                    cadena = auxiiar.getPartido().getEqp1().getEquipo().getNombre()+"  -  "+auxiiar.getPartido().getGoles_eqp1()+"     "+" vs "+"    "+auxiiar.getPartido().getGoles_eqp2()+"    "+auxiiar.getPartido().getEqp2().getEquipo().getNombre();
+                    modelo.addElement(cadena);
+                    auxiiar = auxiiar.getSig();
                     conta++;
+                    
+                }
+                jornada++;
+                lista.setModel(modelo);
+                panel2.repaint();
                 }
             }
         });
@@ -321,11 +341,7 @@ public class Menu {
             aux = aux.getSig();
             
         }
-        Nodo aux3 = lista_partidos.getTope();
-        while(aux3!=null){
-            System.out.println(aux3.getPartido().getEqp1().getEquipo().getNombre()+" vs "+aux3.getPartido().getEqp2().getEquipo().getNombre());
-            aux3 = aux3.getSig();
-        }
+        auxiiar = lista_partidos.getTope();
      JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Mensaje",JOptionPane.INFORMATION_MESSAGE); 
         
     }
