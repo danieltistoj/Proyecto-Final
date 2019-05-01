@@ -26,13 +26,13 @@ import javax.swing.border.LineBorder;
  * @author Usuario
  */
 public class Menu {
-    private boolean next_botones=false,next_boton2=false;
-    private JList lista;
-    private JScrollPane scrollLista;
-    private JFrame ventana, ventana2;
-    private JPanel panel, panel2;
-    private DefaultListModel modelo;//declaramos el Modelo
-    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Informacion,Atras,Gresultados;
+    private boolean next_botones=false,next_boton2=false,EntradaListaEqp=false;
+    private JList lista, lista2;
+    private JScrollPane scrollLista, scrollpane;
+    private JFrame ventana,ResultadoJornada,ListaEquipos;
+    private JPanel panel, panel2, panel_listaEqp;
+    private DefaultListModel modelo, modelo2;//declaramos el Modelo
+    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Informacion,Atras,Gresultados, Atras2;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
     private Nodo auxiiar;
@@ -40,9 +40,23 @@ public class Menu {
     
     public Menu(){
         
+        //scroll para un panel
+        lista2 = new JList();
+        lista2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+        //inicializar scroll*
+        scrollpane = new JScrollPane();//es para hacer una barra que pueda bajar para hacer y ver la lista completa...
+        scrollpane.setBounds(0,30,600, 370);
+        scrollpane.setViewportView(lista2);  
+        //inicializar el modelo
+        modelo2 = new DefaultListModel();
+        
+        Atras2 = new JButton("Atras");
+        Atras2.setBounds(0,0,70,30);
+        
+        //boton para generar los resultados de los partidos de cada jornada
         Gresultados = new JButton("Generar Resultados");
         Gresultados.setBounds(450,0, 150,30);
-          
+          //boton para ir a la ventana menu
         Atras = new JButton("Atras");
         Atras.setBounds(0,0, 70,30);
         
@@ -54,7 +68,7 @@ public class Menu {
         scrollLista.setViewportView(lista);  
         //inicializar el modelo
         modelo = new DefaultListModel();
-        
+        //panel de la ventana secundaria que contiene a las jornadas
         panel2 = new JPanel();
         panel2.setBounds(0, 0,600,400);
         panel2.setBackground(java.awt.Color.WHITE);
@@ -64,13 +78,32 @@ public class Menu {
         panel2.add(Atras);
         panel2.add(Gresultados);
         
-        ventana2 = new JFrame();
-        ventana2.setSize(600, 400);
-        ventana2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ventana2.setLocationRelativeTo(null);
-        ventana2.setLayout(null);
-        ventana2.add(panel2);
-        ventana2.setResizable(false);
+        ResultadoJornada = new JFrame();
+        ResultadoJornada.setSize(600, 400);
+        ResultadoJornada.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ResultadoJornada.setLocationRelativeTo(null);
+        ResultadoJornada.setLayout(null);
+        ResultadoJornada.add(panel2);
+        ResultadoJornada.setResizable(false);
+        
+        
+        //ventana de la lista de equipos
+        panel_listaEqp = new JPanel();
+        panel_listaEqp.setBounds(0, 0,400,400);
+        panel_listaEqp.setBackground(java.awt.Color.WHITE);
+        panel_listaEqp.setLayout(null);
+        panel_listaEqp.setVisible(true);
+        panel_listaEqp.add(scrollpane);
+        panel_listaEqp.add(Atras2);
+        
+        ListaEquipos = new JFrame();
+        ListaEquipos.setSize(400, 400);
+        ListaEquipos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ListaEquipos.setLocationRelativeTo(null);
+        ListaEquipos.setLayout(null);
+        ListaEquipos.add(panel_listaEqp);
+        
+        
        
         //Inicializar listas
         lista_eqp1 = new Lista(); // lista de los equipos de la liga
@@ -217,21 +250,49 @@ public class Menu {
         });
          //fin del boton de generar partidos 
            
+         // lista de los equipos en el sistema
          
        Lista_eqp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-  
-    JScrollPane scrollPane = new JScrollPane ();
-    JOptionPane.showMessageDialog (ventana, scrollPane);
+                ventana.setVisible(false);
+                ListaEquipos.setVisible(true);
+                 if(lista_eqp1.Vacia()){
+                   JOptionPane.showMessageDialog(null,"La lista de equipos esta vacia","Error",JOptionPane.ERROR_MESSAGE);   
+                 }
+                 else{
+                     if(EntradaListaEqp==false){
+                    Nodo aux = lista_eqp1.getTope();
+                    String cadena;
+                    while(aux!=null){
+                        cadena = aux.getEquipo().getNombre();
+                        modelo2.addElement(cadena);
+                        aux = aux.getSig();
+                    }
+                     EntradaListaEqp = true;
+                     lista2.setModel(modelo2);
+                     panel_listaEqp.repaint();
+                    
+                 }
+                     
+                 }//fin else
                
+            }
+        });
+
+       
+       Atras2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventana.setVisible(true);
+                ListaEquipos.setVisible(false);
             }
         });
        
        Atras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ventana2.setVisible(false);
+                ResultadoJornada.setVisible(false);
                 ventana.setVisible(true);
             }
         });
@@ -240,7 +301,7 @@ public class Menu {
             @Override
             public void actionPerformed(ActionEvent e) {
               ventana.setVisible(false);
-              ventana2.setVisible(true);
+              ResultadoJornada.setVisible(true);
             }
         });
           
@@ -342,7 +403,7 @@ public class Menu {
             
         }
         auxiiar = lista_partidos.getTope();
-     JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Mensaje",JOptionPane.INFORMATION_MESSAGE); 
+     JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Error",JOptionPane.ERROR_MESSAGE); 
         
     }
 }
