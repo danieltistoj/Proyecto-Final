@@ -15,15 +15,15 @@ public class Arbol {
     private int conta, altura;
   
     
-    public void Insertar(int dato){
-        raiz = Agregar(raiz,dato);
+    public void Insertar(Equipo equipo){
+        raiz = Agregar(raiz,equipo);
     }
 
     
-    public Nodo Agregar(Nodo nodo, int dato){
+    public Nodo Agregar(Nodo nodo, Equipo equipo){
         if(nodo==null){
             nodo = new Nodo();
-            nodo.setDato(dato);
+            nodo.setEquipo(equipo);
             nodo.setHijo_der(null);
             nodo.setHijo_izq(null);
             nodo.setAltura(nodo.getAltura()+1);
@@ -31,13 +31,13 @@ public class Arbol {
             
         }
         else{
-            if(dato<nodo.getEquipo().getPuntos()){
-                nodo.setHijo_izq(Agregar(nodo.getHijo_izq(), dato));
+            if(equipo.getPuntos()<nodo.getEquipo().getPuntos()){
+                nodo.setHijo_izq(Agregar(nodo.getHijo_izq(),equipo));
                 nodo.setAltura(nodo.getAltura()+1);
         
             }
-            if(dato>nodo.getDato()){
-                nodo.setHijo_der(Agregar(nodo.getHijo_der(), dato));
+            if(equipo.getPuntos()>nodo.getEquipo().getPuntos()){
+                nodo.setHijo_der(Agregar(nodo.getHijo_der(), equipo));
                 nodo.setAltura(nodo.getAltura()+1);
             }
             
@@ -80,11 +80,11 @@ public class Arbol {
         return nodo;
     }
     
-   public Nodo Buscar(int dato){
+   public Nodo Buscar(Equipo equipo){
    Nodo aux = raiz;
    conta=0;
-       while(aux.getDato()!=dato){
-           if(aux.getDato()>dato){
+       while(aux.getEquipo().getPuntos()!=equipo.getPuntos()){
+           if(aux.getEquipo().getPuntos()>equipo.getPuntos()){
                aux = aux.getHijo_izq();
                conta++;
            }

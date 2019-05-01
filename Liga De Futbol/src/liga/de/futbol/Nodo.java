@@ -11,8 +11,9 @@ package liga.de.futbol;
  */
 public class Nodo {
    private  Equipo equipo;
-   private  Nodo sig, ant;
+   private  Nodo sig, ant, hijo_izq, hijo_der;
    private Partido partido;
+   private int altura, equilibrio;
 
     public Partido getPartido() {
         return partido;
@@ -45,8 +46,38 @@ public class Nodo {
     public void setAnt(Nodo ant) {
         this.ant = ant;
     }
-    
-    
 
-   
+    public Nodo getHijo_izq() {
+        return hijo_izq;
+    }
+
+    public void setHijo_izq(Nodo hijo_izq) {
+        this.hijo_izq = hijo_izq;
+    }
+
+    public Nodo getHijo_der() {
+        return hijo_der;
+    }
+
+    public void setHijo_der(Nodo hijo_der) {
+        this.hijo_der = hijo_der;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public int getEquilibrio() {
+        return equilibrio;
+    }
+
+    public void setEquilibrio(int equilibrio) {
+        this.equilibrio = equilibrio;
+    }
+    
+    
 }

@@ -329,6 +329,26 @@ public class Menu {
             }
         });
        
+       Mostrar_ClsG.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(lista_eqp1.Vacia()){
+                    JOptionPane.showMessageDialog(null,"No hay equipos en el sistema","Error",JOptionPane.ERROR_MESSAGE);  
+                }
+                else{
+                    Nodo aux = lista_eqp1.getTope();
+                    while(aux!=null){
+                        System.out.println("Nombre: "+aux.getEquipo().getNombre());
+                        System.out.println("Goles a favor: "+aux.getEquipo().getGolesAfavor());
+                        System.out.println("Goles en contra: "+aux.getEquipo().getGolesEncontra());
+                        System.out.println("Puntos: "+aux.getEquipo().getPuntos());
+                        System.out.println("................................................");
+                        aux = aux.getSig();
+                    }
+                }
+            }
+        });
+       
           //fin
         ventana.add(panel);
         ventana.setVisible(true);
