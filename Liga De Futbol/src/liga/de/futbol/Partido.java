@@ -48,20 +48,22 @@ public class Partido {
     }
     
 
- public void GenerarGoles(){
+ public void GenerarGoles(int puntosG, int puntosP, int puntosE){
      goles_eqp1 = (int) (Math.random() * 5) + 1;
      goles_eqp2 = (int) (Math.random() * 5) + 1;
      Eqp1.getEquipo().setGolesAfavor(goles_eqp1);
      Eqp2.getEquipo().setGolesAfavor(goles_eqp2);
      if(goles_eqp1>goles_eqp2){
-         Eqp1.getEquipo().setPuntos(3);
+         Eqp1.getEquipo().setPuntos(puntosG);
+         Eqp2.getEquipo().setPuntos(puntosP);
      }
      if(goles_eqp1<goles_eqp2){
-         Eqp2.getEquipo().setPuntos(3);
+         Eqp2.getEquipo().setPuntos(puntosG);
+         Eqp1.getEquipo().setPuntos(puntosP);
      }
      if(goles_eqp1==goles_eqp2){
-         Eqp2.getEquipo().setPuntos(1);
-         Eqp1.getEquipo().setPuntos(1);
+         Eqp2.getEquipo().setPuntos(puntosE);
+         Eqp1.getEquipo().setPuntos(puntosE);
      }
       Eqp1.getEquipo().setGolesEncontra(goles_eqp2);
       Eqp2.getEquipo().setGolesEncontra(goles_eqp1);

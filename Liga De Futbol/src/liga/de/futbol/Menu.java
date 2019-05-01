@@ -27,19 +27,19 @@ import javax.swing.border.LineBorder;
  * @author Usuario
  */
 public class Menu {
-    private boolean next_botones=false,next_boton2=false,EntradaListaEqp=false;
+    private boolean next_botones=false,next_boton2=false,EntradaListaEqp=false,conf_pts=false;
     private JList lista, lista2;
     private JScrollPane scrollLista, scrollpane;
     private JFrame ventana;
     private JDialog ResultadoJornada,ListaEquipos;
     private JPanel panel, panel2, panel_listaEqp;
     private DefaultListModel modelo, modelo2;//declaramos el Modelo
-    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Informacion,Atras,Gresultados, Atras2;
+    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
     private Nodo auxiiar;
     private Arbol arbol;
-    private int jornada=1, PartidosPorJornada, ComPrt, jornada2, contador_jornadas=0;
+    private int jornada=1, PartidosPorJornada, ComPrt, jornada2, contador_jornadas=0,puntos_ganar,puntos_perder,puntos_empate;
     
     public Menu(){
         arbol = new Arbol();
@@ -52,17 +52,14 @@ public class Menu {
         scrollpane.setViewportView(lista2);  
         //inicializar el modelo
         modelo2 = new DefaultListModel();
-        
-        Atras2 = new JButton("Atras");
-        Atras2.setBounds(0,0,70,30);
-        
+           
         //boton para generar los resultados de los partidos de cada jornada
-        Gresultados = new JButton("Generar Resultados");
-        Gresultados.setBounds(450,0, 150,30);
-          //boton para ir a la ventana menu
-        Atras = new JButton("Atras");
-        Atras.setBounds(0,0, 70,30);
+        Gresultados = new JButton("Resultados automatico");
+        Gresultados.setBounds(350,0, 170,30);
         
+        GresultadosA = new JButton("Resultados manual");
+        GresultadosA.setBounds(120, 0, 170, 30);
+          //boton para ir a la ventana menu
         lista = new JList();
         lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
         //inicializar scroll*
@@ -78,8 +75,8 @@ public class Menu {
         panel2.setLayout(null);
         panel2.setVisible(true);
         panel2.add(scrollLista);
-        panel2.add(Atras);
         panel2.add(Gresultados);
+        panel2.add(GresultadosA);
         
         ResultadoJornada = new JDialog(ventana,"Resultado De Jornadas");
         ResultadoJornada.setSize(600, 400);
@@ -96,8 +93,7 @@ public class Menu {
         panel_listaEqp.setLayout(null);
         panel_listaEqp.setVisible(true);
         panel_listaEqp.add(scrollpane);
-        panel_listaEqp.add(Atras2);
-        
+          
         ListaEquipos = new JDialog(ventana,"Lista De Equipos");
         ListaEquipos.setSize(400, 400);
        
@@ -113,19 +109,19 @@ public class Menu {
         
         //BOTONES DE DESPLIEGUE DE PARAMETROS DEL PROGRAMA
         Lista_eqp = new JButton("Lista De Los Equipos");
-        Lista_eqp.setBounds(400, 270, 225, 30);
-        
-        Informacion = new JButton("Informacion");
-        Informacion.setBounds(400, 330, 225, 30);
-        
+        Lista_eqp.setBounds(400, 330, 225, 30);
+               
         Configurar = new JButton("Configurar 'Cantidad De Equipos'");
         Configurar.setBounds(300, 90, 225, 30);
          
+        AsgPuntos = new JButton("Asignar puntos");
+        AsgPuntos.setBounds(300, 210, 225, 30);
+        
         Generar_partidos= new JButton("Generar Partios");
         Generar_partidos.setBounds(300, 150, 225, 30);
         
         Otros = new JButton("Otros");
-        Otros.setBounds(300,210 ,225, 30);
+        Otros.setBounds(300,270 ,225, 30);
         
         //BOTONE PRINCIPALES
         
@@ -165,13 +161,14 @@ public class Menu {
             public void actionPerformed(ActionEvent e) {
                if(next_botones==false){
                    next_botones = true;
-                   Ingreso_eqp.setBounds(200, 270, 225, 30);
-                   Ingreso_resul.setBounds(200,330 , 225, 30);
-                   Mostrar_ClsG.setBounds(200,390 , 225, 30);
+                   Ingreso_eqp.setBounds(200, 330, 225, 30);
+                   Ingreso_resul.setBounds(200,390 , 225, 30);
+                   Mostrar_ClsG.setBounds(200,450 , 225, 30);
                    
                      panel.add(Configurar);
                      panel.add(Generar_partidos);
                      panel.add(Otros);
+                     panel.add(AsgPuntos);
                      panel.repaint();
                      
                }
@@ -184,7 +181,8 @@ public class Menu {
                    DesplegarBotonesOtros();
                    panel.remove(Configurar);
                    panel.remove(Generar_partidos);
-                   panel.remove(Otros);
+                   panel.remove(Otros); 
+                   panel.remove(AsgPuntos);
                    Ingreso_eqp.setBounds(200, 90, 225, 30);
                    Ingreso_resul.setBounds(200, 150, 225, 30);
                    Mostrar_ClsG.setBounds(200, 210, 225, 30);
@@ -207,6 +205,7 @@ public class Menu {
             public void actionPerformed(ActionEvent e) {
                if(Canti_eqp==0){
                    Canti_eqp = Integer.parseInt(JOptionPane.showInputDialog("Ingrese cuantos equipos quiere en la liga")); // solicita la contidad de equipos
+                   if(Canti_eqp>1){
                    ComPrt = (factorial(Canti_eqp))/((factorial(Canti_eqp-2))*(factorial(2))); // encontramos el numero de combinaciones 
                    if(Canti_eqp%2==0){
                        PartidosPorJornada = Canti_eqp/2;//encontramos el numero de partidos que se pueden llevar por jornada si el numero de rwuipos ingresados es par
@@ -215,22 +214,27 @@ public class Menu {
                        PartidosPorJornada = (Canti_eqp-1)/(2);//encontramos el numero de partidos que se pueden llevar por jornada si el numero de rwuipos ingresados es impar
                    }
                    jornada2 = ComPrt/PartidosPorJornada;//encontramos cuatas jornadas hay
+                   JOptionPane.showMessageDialog(null,"Equipos: "+Canti_eqp+"\n"+
+                           "Jornadas: "+jornada2+"\n"+
+                           "Partidos Totales: "+ComPrt+"\n"+
+                           "Partidos Por Jornada: "+PartidosPorJornada
+                           ,"",JOptionPane.INFORMATION_MESSAGE);
                }
+                   else{
+                   JOptionPane.showMessageDialog(null,"La cantidad de partidos debe de ser mayor a uno","Error",JOptionPane.ERROR_MESSAGE);      
+                   }
+               }//fin de la primera condicion
                else{
-                    JOptionPane.showMessageDialog(null,"Ya se han ingresado la cantidad de equipos","Error",JOptionPane.ERROR_MESSAGE);  
+                     JOptionPane.showMessageDialog(null,"Equipos: "+Canti_eqp+"\n"+
+                           "Jornadas: "+jornada2+"\n"+
+                           "Partidos Totales: "+ComPrt+"\n"+
+                           "Partidos Por Jornada: "+PartidosPorJornada+""
+                           ,"Datos De La Liga",JOptionPane.INFORMATION_MESSAGE);
                }
             }
         });
           //fin boton
-          
-          Informacion.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                 JOptionPane.showMessageDialog(null,"1) Equipo ganador se le suma tres puntos \n"+"2) Al equipo que pierde no se le dan puntos\n"+"3) A los esquipos que empatan se les da un punto\n"+
-                         "4) Cada equipo debe de enfrentarce con cada uno de los demas equipos"
-                         ,"Informacion",JOptionPane.INFORMATION_MESSAGE); 
-            }
-        });
+         
           
           //Ingresar equipos
           Ingreso_eqp.addActionListener(new ActionListener() {
@@ -248,8 +252,24 @@ public class Menu {
                   JOptionPane.showMessageDialog(null,"No se han creado aun los equipos","Error",JOptionPane.ERROR_MESSAGE);  
                }
                else{
+                   
                    FormarPartidos();
                }
+            }
+        });
+         
+         AsgPuntos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(conf_pts==false){
+             puntos_ganar = Integer.parseInt(JOptionPane.showInputDialog("Ingres los puntos del equipo ganador"));
+	     puntos_perder = Integer.parseInt(JOptionPane.showInputDialog("Ingres los puntos del equipo perdedor"));
+             puntos_empate = Integer.parseInt(JOptionPane.showInputDialog("Ingres los putos de empate"));
+             conf_pts = true;
+            }
+                else{
+                   JOptionPane.showMessageDialog(null,"Ya se han asignado los puntos para los partidos","Error",JOptionPane.ERROR_MESSAGE);   
+                }
             }
         });
          //fin del boton de generar partidos 
@@ -260,12 +280,13 @@ public class Menu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //ventana.setVisible(false);
-                ListaEquipos.setVisible(true);
+               
                  if(lista_eqp1.Vacia()){
                    JOptionPane.showMessageDialog(null,"La lista de equipos esta vacia","Error",JOptionPane.ERROR_MESSAGE);   
                  }
                  else{
-                     if(EntradaListaEqp==false){
+                    ListaEquipos.setVisible(true);
+                    if(EntradaListaEqp==false){
                     Nodo aux = lista_eqp1.getTope();
                     String cadena;
                     while(aux!=null){
@@ -283,24 +304,7 @@ public class Menu {
                
             }
         });
-
-       
-       Atras2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //ventana.setVisible(true);
-                ListaEquipos.setVisible(false);
-            }
-        });
-       
-       Atras.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResultadoJornada.setVisible(false);
-                ventana.setVisible(true);
-            }
-        });
-       
+ 
        Ingreso_resul.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -308,29 +312,34 @@ public class Menu {
               ResultadoJornada.setVisible(true);
             }
         });
-          
+      //boton que genera los resultados de los partidos por jornada    
        Gresultados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(auxiiar!=null){
+                if(auxiiar!=null){//verifica primero que la lista tenga nodos
+                 if(conf_pts){ // verifica que ya se hayan asignado puntos para cada caso ganer, perder, empate  
                 int conta=1;
                 String cadena, cadena2;
                 cadena2 = "Jornada "+jornada;
                 modelo.addElement(cadena2);
-                while(conta<=PartidosPorJornada){
-                    auxiiar.getPartido().GenerarGoles();
-                    cadena2 = "Jornada "+jornada;
+                while(conta<=PartidosPorJornada){//el contador va a recorrer de uno hasta el numero de partidos que debe de tener cada jornada que se ha asignado a la variable PartidosPorJornada
+                    auxiiar.getPartido().GenerarGoles(puntos_ganar,puntos_perder,puntos_empate);//se generan los goles de cada partido
+                    cadena2 = "Jornada "+jornada;//numero de la cadena
                     cadena = auxiiar.getPartido().getEqp1().getEquipo().getNombre()+"  -  "+auxiiar.getPartido().getGoles_eqp1()+"     "+" vs "+"    "+auxiiar.getPartido().getGoles_eqp2()+"    "+auxiiar.getPartido().getEqp2().getEquipo().getNombre();
-                    modelo.addElement(cadena);
-                    auxiiar = auxiiar.getSig();
+                    modelo.addElement(cadena);// se ingresa la cadena en el modelo 
+                    auxiiar = auxiiar.getSig(); // se pasa al siguiente nodo
                     conta++;
                     
-                }
+                }//fin del while
                 contador_jornadas++;//lleva una sumatoria de las jornadas que se van creando
                 jornada++;//es solo para que indicar en la ventana por que jornada va 
                 lista.setModel(modelo);
                 panel2.repaint();
-                }
+                }//fin de la segunda condicioin
+                 else{
+                  JOptionPane.showMessageDialog(null,"Asigne antes los puntos para cada caso: Ganador, Perdedor y Empate","Error",JOptionPane.ERROR_MESSAGE);   
+                 }
+                }//fin del primer if
             }
         });
        
@@ -366,22 +375,20 @@ public class Menu {
       if(next_boton2==false){
                    next_boton2 = true;
                    Ingreso_eqp.setBounds(200, 390, 225, 30);
-                   Ingreso_resul.setBounds(200,450 , 225, 30);
+                   Ingreso_resul.setBounds(200, 450, 225, 30);
                    Mostrar_ClsG.setBounds(200,510 , 225, 30);
                    
                      panel.add(Lista_eqp);
-                     panel.add(Informacion);
                      panel.repaint();
                     
                 }
                 else{
                    next_boton2 = false;
                    
-                   panel.remove(Lista_eqp);
-                   panel.remove(Informacion);  
-                   Ingreso_eqp.setBounds(200, 270, 225, 30);
-                   Ingreso_resul.setBounds(200, 330, 225, 30);
-                   Mostrar_ClsG.setBounds(200, 390, 225, 30);
+                   panel.remove(Lista_eqp);  
+                   Ingreso_eqp.setBounds(200, 330, 225, 30);
+                   Ingreso_resul.setBounds(200, 390, 225, 30);
+                   Mostrar_ClsG.setBounds(200, 450, 225, 30);
                    panel.repaint();
                     
                 }   
