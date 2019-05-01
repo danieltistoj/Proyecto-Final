@@ -60,7 +60,7 @@ public class Arbol {
               nodo.setAltura(altura);
               n1.setHijo_der(nodo);
               nodo = n1;
-              System.out.println("entro");
+             // System.out.println("entro");
           }
           
           else{
@@ -125,11 +125,9 @@ public class Arbol {
         return cadena;
         
     }
-    public String Ordenar_In(){
-        cadena = "";
+    public void Ordenar_In(){
         Nodo aux = raiz;
         Inorden(aux);
-        return cadena;
     }
     
     private void Preorden(Nodo nodo_raiz){
@@ -150,9 +148,14 @@ public class Arbol {
     }
     private void Inorden(Nodo nodo_raiz){
         if(nodo_raiz!=null){
-            Inorden(nodo_raiz.getHijo_izq());
-            cadena += "Dato: "+nodo_raiz.getEquipo().getNombre();
             Inorden(nodo_raiz.getHijo_der());
+         
+            System.out.println("Nombre: "+nodo_raiz.getEquipo().getNombre());
+            System.out.println("Goles a favor: "+nodo_raiz.getEquipo().getGolesAfavor());
+            System.out.println("Goles en contra: "+nodo_raiz.getEquipo().getGolesEncontra());
+            System.out.println("Goles a puntos: "+nodo_raiz.getEquipo().getPuntos());
+            System.out.println("......................................................");
+            Inorden(nodo_raiz.getHijo_izq());
         }
         
     }
@@ -172,5 +175,21 @@ public class Arbol {
         return altura;
        
     }
-    
+
+    public String getCadena() {
+        return cadena;
+    }
+
+    public void setCadena(String cadena) {
+        this.cadena = cadena;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+ 
 }
