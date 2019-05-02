@@ -33,11 +33,25 @@ public class Arbol {
             
         }
         else{
-            if(equipo.getPuntos()<nodo.getEquipo().getPuntos()||equipo.getPuntos()==nodo.getEquipo().getPuntos()){
+            //equipo entrante igual al nodo actual
+            if(equipo.getPuntos()==nodo.getEquipo().getPuntos()){
+             
+                if(equipo.getDiferenci_goles()>nodo.getEquipo().getDiferenci_goles()){//si la diferencia de goles es mayor al nodo actual entra como mayor se le da "prioridad"
+                nodo.setHijo_der(Agregar(nodo.getHijo_der(), equipo));
+                nodo.setAltura(nodo.getAltura()+1);
+                }
+                if(equipo.getDiferenci_goles()<nodo.getEquipo().getDiferenci_goles()){//si la diferencia de goles es menor al nodo actual entra como menor
+                nodo.setHijo_izq(Agregar(nodo.getHijo_izq(),equipo));
+                nodo.setAltura(nodo.getAltura()+1);
+                }
+            }
+            //equipo entrante menor al nodo actual
+            if(equipo.getPuntos()<nodo.getEquipo().getPuntos()){
                 nodo.setHijo_izq(Agregar(nodo.getHijo_izq(),equipo));
                 nodo.setAltura(nodo.getAltura()+1);
         
             }
+            //equipo entrnate mayor al nodo actual
             if(equipo.getPuntos()>nodo.getEquipo().getPuntos()){
                 nodo.setHijo_der(Agregar(nodo.getHijo_der(), equipo));
                 nodo.setAltura(nodo.getAltura()+1);
@@ -155,7 +169,8 @@ public class Arbol {
             modelo.addElement("Nombre: "+nodo_raiz.getEquipo().getNombre());
             modelo.addElement("Goles a favor: "+nodo_raiz.getEquipo().getGolesAfavor());
             modelo.addElement("Goles en contra: "+nodo_raiz.getEquipo().getGolesEncontra());
-            modelo.addElement("Goles a puntos: "+nodo_raiz.getEquipo().getPuntos());
+            modelo.addElement("Diferencia de goles: "+nodo_raiz.getEquipo().getDiferenci_goles());
+            modelo.addElement("Puntos: "+nodo_raiz.getEquipo().getPuntos());
             modelo.addElement("...................................................................");
             Inorden(nodo_raiz.getHijo_izq(),modelo);
         }

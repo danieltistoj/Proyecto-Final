@@ -10,15 +10,15 @@ package liga.de.futbol;
  * @author Usuario
  */
 public class Equipo {
-   private int puntos = 0, GolesAfavor = 0, GolesEncontra = 0, num_referencia = 0;
+   private int puntos = 0, GolesAfavor = 0, GolesEncontra = 0, Diferenci_goles = 0;
    private String nombre;
 
-    public int getNum_referencia() {
-        return num_referencia;
+    public int getDiferenci_goles() {
+        return Diferenci_goles;
     }
 
-    public void setNum_referencia(int num_referencia) {
-        this.num_referencia = num_referencia;
+    public void setDiferenci_goles(int Diferenci_goles) {
+        this.Diferenci_goles = Diferenci_goles;
     }
  
     public int getPuntos() {
@@ -52,6 +52,8 @@ public class Equipo {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-   
+   public void DiferenciaGoles(){
+       setDiferenci_goles(GolesAfavor-GolesEncontra);
+   }
    
 }

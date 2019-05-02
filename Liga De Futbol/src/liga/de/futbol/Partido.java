@@ -48,7 +48,7 @@ public class Partido {
     }
     
 
- public void GenerarGoles(int puntosG, int puntosP, int puntosE){
+ public void GenerarGolesAutomatico(int puntosG, int puntosP, int puntosE){
      goles_eqp1 = (int) (Math.random() * 5) + 1;
      goles_eqp2 = (int) (Math.random() * 5) + 1;
      Eqp1.getEquipo().setGolesAfavor(goles_eqp1);
@@ -68,6 +68,30 @@ public class Partido {
       Eqp1.getEquipo().setGolesEncontra(goles_eqp2);
       Eqp2.getEquipo().setGolesEncontra(goles_eqp1);
     
+ }
+ 
+ public void GenerarGolesManual(int puntosG, int puntosP, int puntosE, int GolEqp1, int GolEqp2){
+     setGoles_eqp1(GolEqp1);
+     setGoles_eqp2(GolEqp2);
+     
+     Eqp1.getEquipo().setGolesAfavor(GolEqp1);
+     Eqp2.getEquipo().setGolesAfavor(GolEqp2);
+     
+      if(GolEqp1>GolEqp2){
+         Eqp1.getEquipo().setPuntos(puntosG);
+         Eqp2.getEquipo().setPuntos(puntosP);
+     }
+     if(GolEqp1<GolEqp2){
+         Eqp2.getEquipo().setPuntos(puntosG);
+         Eqp1.getEquipo().setPuntos(puntosP);
+     }
+     if(GolEqp1==GolEqp2){
+         Eqp2.getEquipo().setPuntos(puntosE);
+         Eqp1.getEquipo().setPuntos(puntosE);
+     }
+      Eqp1.getEquipo().setGolesEncontra(GolEqp2);
+      Eqp2.getEquipo().setGolesEncontra(GolEqp1);
+
  }
     
     

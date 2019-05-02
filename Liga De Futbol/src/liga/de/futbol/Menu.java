@@ -336,27 +336,24 @@ public class Menu {
               ResultadoJornada.setVisible(true);
             }
         });
+       
+       
       //boton que genera los resultados de los partidos por jornada    
        Gresultados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(auxiiar!=null){//verifica primero que la lista tenga nodos
-                 if(conf_pts){ // verifica que ya se hayan asignado puntos para cada caso ganer, perder, empate  
+                if(conf_pts){ // verifica que ya se hayan asignado puntos para cada caso ganer, perder, empate  
                 int conta=1;
-                String cadena, cadena2;
-                cadena2 = "Jornada "+jornada;
-                modelo.addElement(cadena2);
+                modelo.addElement("Jornada "+(contador_jornadas+1));
                 while(conta<=PartidosPorJornada){//el contador va a recorrer de uno hasta el numero de partidos que debe de tener cada jornada que se ha asignado a la variable PartidosPorJornada
-                    auxiiar.getPartido().GenerarGoles(puntos_ganar,puntos_perder,puntos_empate);//se generan los goles de cada partido
-                    cadena2 = "Jornada "+jornada;//numero de la cadena
-                    cadena = auxiiar.getPartido().getEqp1().getEquipo().getNombre()+"  -  "+auxiiar.getPartido().getGoles_eqp1()+"     "+" vs "+"    "+auxiiar.getPartido().getGoles_eqp2()+"    "+auxiiar.getPartido().getEqp2().getEquipo().getNombre();
-                    modelo.addElement(cadena);// se ingresa la cadena en el modelo 
+                    auxiiar.getPartido().GenerarGolesAutomatico(puntos_ganar,puntos_perder,puntos_empate);//se generan los goles de cada partido
+                    modelo.addElement(auxiiar.getPartido().getEqp1().getEquipo().getNombre()+"  -  "+auxiiar.getPartido().getGoles_eqp1()+"     "+" vs "+"    "+auxiiar.getPartido().getGoles_eqp2()+"  -  "+auxiiar.getPartido().getEqp2().getEquipo().getNombre());// se ingresa la cadena en el modelo 
                     auxiiar = auxiiar.getSig(); // se pasa al siguiente nodo
                     conta++;
                     
                 }//fin del while
                 contador_jornadas++;//lleva una sumatoria de las jornadas que se van creando
-                jornada++;//es solo para que indicar en la ventana por que jornada va 
                 lista.setModel(modelo);
                 panel2.repaint();
                 }//fin de la segunda condicioin
@@ -364,6 +361,34 @@ public class Menu {
                   JOptionPane.showMessageDialog(null,"Asigne antes los puntos para cada caso: Ganador, Perdedor y Empate","Error",JOptionPane.ERROR_MESSAGE);   
                  }
                 }//fin del primer if
+            }
+        });
+       //gnera los goles de cada partido de cada jornada de forma manual uno por uno
+       GresultadosA.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+             if(auxiiar!=null){//verifica que la variable global no este vacia 
+                 if(conf_pts){//con esta variable de tipo booleano se verifica si ya se han ingresado los tipos de punteo
+                     int conta = 1;
+                      modelo.addElement("Jornada "+(contador_jornadas+1));
+                     while(conta<=PartidosPorJornada){//el contador debe de ir de uno al nuemro de partidos que debe de tener una jornada
+                         int gol_eqp1 = Integer.parseInt(JOptionPane.showInputDialog("Jornada: "+(contador_jornadas+1)+"   -   Partido: "+conta+"   -  Ingrese goles del jugador: "+auxiiar.getPartido().getEqp1().getEquipo().getNombre()));
+                         int gol_eqp2 = Integer.parseInt(JOptionPane.showInputDialog("Jornada: "+(contador_jornadas+1)+"   -   Partido: "+conta+"   -  Ingrese goles del jugador: "+auxiiar.getPartido().getEqp2().getEquipo().getNombre()));
+                         auxiiar.getPartido().GenerarGolesManual(puntos_ganar,puntos_perder,puntos_empate, gol_eqp1, gol_eqp2);
+                         modelo.addElement(auxiiar.getPartido().getEqp1().getEquipo().getNombre()+"  -  "+auxiiar.getPartido().getGoles_eqp1()+"     "+" vs "+"    "+auxiiar.getPartido().getGoles_eqp2()+"  -  "+auxiiar.getPartido().getEqp2().getEquipo().getNombre());
+                         auxiiar = auxiiar.getSig();
+                         conta++;
+                     }
+                     contador_jornadas++; // se aumenta el contador de jornadas
+                     lista.setModel(modelo);// se ingresa el modelo en la lista que esta dentro del scroll
+                     panel2.repaint();
+                     
+                 }
+                 else{
+                   JOptionPane.showMessageDialog(null,"Asigne antes los puntos para cada caso: Ganador, Perdedor y Empate","Error",JOptionPane.ERROR_MESSAGE);  
+                 }
+                 
+             }
             }
         });
        
@@ -380,6 +405,7 @@ public class Menu {
                         if(contador_jornadas==jornada2&&Tabla_hecha==false){
                         Nodo aux = lista_eqp1.getTope();
                         while(aux!=null){
+                            aux.getEquipo().DiferenciaGoles();
                             arbol.Insertar(aux.getEquipo());
                             aux = aux.getSig();
                         }
