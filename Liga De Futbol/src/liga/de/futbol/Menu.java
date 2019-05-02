@@ -450,8 +450,9 @@ public class Menu {
             }
         }
     }
-    
-    public void FormarPartidos(){
+   
+    public void FormarPartidos(){//funcion que genera los partidos que se llevaran 
+        if(lista_partidos.Vacia()){
         Nodo aux = lista_eqp1.getTope(), aux2;
         while(aux!=null){
             aux2 = aux.getSig();
@@ -466,13 +467,17 @@ public class Menu {
                 
                 
             }
-            aux = aux.getSig();
-            
+            aux = aux.getSig(); 
         }
      auxiiar = lista_partidos.getTope();
-     JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Error",JOptionPane.INFORMATION_MESSAGE); 
+     JOptionPane.showMessageDialog(null,"Partidos Generados","Mensaje",JOptionPane.INFORMATION_MESSAGE); 
+    }
+        else{
+           JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Error",JOptionPane.ERROR_MESSAGE); 
+        }
         
     }
+    
     public int  factorial (int numero) {
         int factorial =1;
   for(int i =1; i<=numero; i++){
