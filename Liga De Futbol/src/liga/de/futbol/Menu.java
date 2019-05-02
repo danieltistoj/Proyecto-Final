@@ -27,13 +27,13 @@ import javax.swing.border.LineBorder;
  * @author Usuario
  */
 public class Menu {
-    private boolean next_botones=false,next_boton2=false,EntradaListaEqp=false,conf_pts=false;
-    private JList lista, lista2;
-    private JScrollPane scrollLista, scrollpane;
+    private boolean next_botones=false,next_boton2=false,EntradaListaEqp=false,conf_pts=false,Tabla_hecha=false;
+    private JList lista, lista2, lista3;
+    private JScrollPane scrollLista, scrollpane,scrollClasificacion;
     private JFrame ventana;
-    private JDialog ResultadoJornada,ListaEquipos;
-    private JPanel panel, panel2, panel_listaEqp;
-    private DefaultListModel modelo, modelo2;//declaramos el Modelo
+    private JDialog ResultadoJornada,ListaEquipos,ClasGeneral;
+    private JPanel panel, panel2, panel_listaEqp,panel_clasificacion;
+    private DefaultListModel modelo, modelo2, modelo3;//declaramos el Modelo
     private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
@@ -43,12 +43,36 @@ public class Menu {
     
     public Menu(){
         arbol = new Arbol();
+        //ventana de las clasificaciones generales
+        
+        lista3 = new JList();
+        lista3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+        //inicializar scroll*
+        scrollClasificacion = new JScrollPane();//es para hacer una barra que pueda bajar para hacer y ver la lista completa...
+        scrollClasificacion.setBounds(0,30,600, 300);
+        scrollClasificacion.setViewportView(lista3);  
+        //inicializar el modelo
+        modelo3 = new DefaultListModel();
+        
+        panel_clasificacion = new JPanel();
+        panel_clasificacion.setBounds(0, 0,600,400);
+        panel_clasificacion.setBackground(java.awt.Color.WHITE);
+        panel_clasificacion.setLayout(null);
+        panel_clasificacion.setVisible(true);
+        panel_clasificacion.add(scrollClasificacion);
+        
+        ClasGeneral = new JDialog(ventana,"Resultado De Jornadas");
+        ClasGeneral.setSize(600, 400);
+        ClasGeneral.setLocationRelativeTo(null);
+        ClasGeneral.setLayout(null);
+        ClasGeneral.add(panel_clasificacion);
+        ClasGeneral.setResizable(false);
         //scroll para un panel
         lista2 = new JList();
         lista2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
         //inicializar scroll*
         scrollpane = new JScrollPane();//es para hacer una barra que pueda bajar para hacer y ver la lista completa...
-        scrollpane.setBounds(0,30,600, 370);
+        scrollpane.setBounds(0,30,600, 300);
         scrollpane.setViewportView(lista2);  
         //inicializar el modelo
         modelo2 = new DefaultListModel();
@@ -64,7 +88,7 @@ public class Menu {
         lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
         //inicializar scroll*
         scrollLista = new JScrollPane();//es para hacer una barra que pueda bajar para hacer y ver la lista completa...
-        scrollLista.setBounds(0,30,600, 370);
+        scrollLista.setBounds(0,30,600, 300 );
         scrollLista.setViewportView(lista);  
         //inicializar el modelo
         modelo = new DefaultListModel();
@@ -350,20 +374,28 @@ public class Menu {
                     JOptionPane.showMessageDialog(null,"No hay equipos en el sistema","Error",JOptionPane.ERROR_MESSAGE);  
                 }
                 else{
-               
+                     ClasGeneral.setVisible(true);
+              
                     if(lista_partidos.Vacia()!=true){
-                        if(contador_jornadas==jornada2){
+                        if(contador_jornadas==jornada2&&Tabla_hecha==false){
                         Nodo aux = lista_eqp1.getTope();
                         while(aux!=null){
                             arbol.Insertar(aux.getEquipo());
                             aux = aux.getSig();
                         }
-                       arbol.Ordenar_In();
+                      Tabla_hecha = true;
+                      modelo3=arbol.Ordenar_In(modelo3);
+                      lista3.setModel(modelo3);
+                      panel_clasificacion.repaint();
                         }
+                     
                        
                     }//fin del primer if 
-                }
+                }//fin del elese
+                    
+
             }
+            
         });
        
           //fin
@@ -437,7 +469,7 @@ public class Menu {
             aux = aux.getSig();
             
         }
-        auxiiar = lista_partidos.getTope();
+     auxiiar = lista_partidos.getTope();
      JOptionPane.showMessageDialog(null,"Ya se han generado los partidos","Error",JOptionPane.INFORMATION_MESSAGE); 
         
     }

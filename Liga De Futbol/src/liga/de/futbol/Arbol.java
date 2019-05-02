@@ -5,6 +5,8 @@
  */
 package liga.de.futbol;
 
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author Usuario
@@ -31,7 +33,7 @@ public class Arbol {
             
         }
         else{
-            if(equipo.getPuntos()<nodo.getEquipo().getPuntos()){
+            if(equipo.getPuntos()<nodo.getEquipo().getPuntos()||equipo.getPuntos()==nodo.getEquipo().getPuntos()){
                 nodo.setHijo_izq(Agregar(nodo.getHijo_izq(),equipo));
                 nodo.setAltura(nodo.getAltura()+1);
         
@@ -56,7 +58,7 @@ public class Arbol {
           if(izq>der){
               Nodo n1 = nodo.getHijo_izq();
               nodo.setHijo_izq(n1.getHijo_der());
-             int  altura = getAltura(nodo);
+             int  altura1 = getAltura(nodo);
               nodo.setAltura(altura);
               n1.setHijo_der(nodo);
               nodo = n1;
@@ -66,8 +68,8 @@ public class Arbol {
           else{
               Nodo n1 = nodo.getHijo_der();
               nodo.setHijo_der(n1.getHijo_izq());
-              int  altura = getAltura(nodo);
-              nodo.setAltura(altura);
+            int  altura1 = getAltura(nodo);
+              nodo.setAltura(altura1);
               n1.setHijo_izq(nodo);
               nodo = n1;
               
@@ -125,9 +127,10 @@ public class Arbol {
         return cadena;
         
     }
-    public void Ordenar_In(){
+    public DefaultListModel Ordenar_In(DefaultListModel modelo){
         Nodo aux = raiz;
-        Inorden(aux);
+        Inorden(aux, modelo);
+       return modelo;
     }
     
     private void Preorden(Nodo nodo_raiz){
@@ -146,16 +149,15 @@ public class Arbol {
         }
         
     }
-    private void Inorden(Nodo nodo_raiz){
+    private void Inorden(Nodo nodo_raiz,DefaultListModel modelo){
         if(nodo_raiz!=null){
-            Inorden(nodo_raiz.getHijo_der());
-         
-            System.out.println("Nombre: "+nodo_raiz.getEquipo().getNombre());
-            System.out.println("Goles a favor: "+nodo_raiz.getEquipo().getGolesAfavor());
-            System.out.println("Goles en contra: "+nodo_raiz.getEquipo().getGolesEncontra());
-            System.out.println("Goles a puntos: "+nodo_raiz.getEquipo().getPuntos());
-            System.out.println("......................................................");
-            Inorden(nodo_raiz.getHijo_izq());
+            Inorden(nodo_raiz.getHijo_der(),modelo);
+            modelo.addElement("Nombre: "+nodo_raiz.getEquipo().getNombre());
+            modelo.addElement("Goles a favor: "+nodo_raiz.getEquipo().getGolesAfavor());
+            modelo.addElement("Goles en contra: "+nodo_raiz.getEquipo().getGolesEncontra());
+            modelo.addElement("Goles a puntos: "+nodo_raiz.getEquipo().getPuntos());
+            modelo.addElement("...................................................................");
+            Inorden(nodo_raiz.getHijo_izq(),modelo);
         }
         
     }
