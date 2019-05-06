@@ -10,9 +10,11 @@ import java.awt.event.ActionListener;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,11 +32,12 @@ public class Menu {
     private boolean next_botones=false,next_boton2=false,EntradaListaEqp=false,conf_pts=false,Tabla_hecha=false;
     private JList lista, lista2, lista3;
     private JScrollPane scrollLista, scrollpane,scrollClasificacion;
+    private JLabel fondo_panel;
     private JFrame ventana;
     private JDialog ResultadoJornada,ListaEquipos,ClasGeneral;
     private JPanel panel, panel2, panel_listaEqp,panel_clasificacion;
     private DefaultListModel modelo, modelo2, modelo3;//declaramos el Modelo
-    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA;
+    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA, guardar;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
     private Nodo auxiiar;
@@ -42,6 +45,7 @@ public class Menu {
     private int jornada=1, PartidosPorJornada, ComPrt, jornada2, contador_jornadas=0,puntos_ganar,puntos_perder,puntos_empate;
     
     public Menu(){
+
         arbol = new Arbol();
         //ventana de las clasificaciones generales
         
@@ -78,6 +82,9 @@ public class Menu {
         modelo2 = new DefaultListModel();
            
         //boton para generar los resultados de los partidos de cada jornada
+        guardar  = new JButton("Guardar");
+        guardar.setBounds(400, 390, 225,30 );
+        
         Gresultados = new JButton("Resultados automatico");
         Gresultados.setBounds(350,0, 170,30);
         
@@ -174,7 +181,7 @@ public class Menu {
        
         
         ventana = new JFrame("Liga De Futbol");
-        ventana.setSize(700, 600);
+        ventana.setSize(700, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLocationRelativeTo(null);
         ventana.setLayout(null);
@@ -328,7 +335,14 @@ public class Menu {
                
             }
         });
- 
+       //Boton guardar
+       guardar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+            }
+        });
+       //fin boton guardar
        Ingreso_resul.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -432,18 +446,20 @@ public class Menu {
     public void DesplegarBotonesOtros(){
       if(next_boton2==false){
                    next_boton2 = true;
-                   Ingreso_eqp.setBounds(200, 390, 225, 30);
-                   Ingreso_resul.setBounds(200, 450, 225, 30);
-                   Mostrar_ClsG.setBounds(200,510 , 225, 30);
+                   Ingreso_eqp.setBounds(200, 450, 225, 30);
+                   Ingreso_resul.setBounds(200,510, 225, 30);
+                   Mostrar_ClsG.setBounds(200,570 , 225, 30);
                    
                      panel.add(Lista_eqp);
+                     panel.add(guardar);
                      panel.repaint();
                     
                 }
                 else{
                    next_boton2 = false;
                    
-                   panel.remove(Lista_eqp);  
+                   panel.remove(Lista_eqp);
+                   panel.remove(guardar);
                    Ingreso_eqp.setBounds(200, 330, 225, 30);
                    Ingreso_resul.setBounds(200, 390, 225, 30);
                    Mostrar_ClsG.setBounds(200, 450, 225, 30);
