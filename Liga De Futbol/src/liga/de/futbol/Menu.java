@@ -355,12 +355,12 @@ public class Menu {
                     File archivo;
                     FileWriter escribir;
                     PrintWriter linea;
-                    String nombre = "", golesA = "", golesE = "", DifeG = "", puntos = "", separador = "........................................";
-                    archivo = new File("usuario.txt");
-                    if(!archivo.exists()){
+                   String nombre_archivo = JOptionPane.showInputDialog(null, "Ingrese el nombre del archivo\n"+"Ejemplo: nombre.txt");
+                    archivo = new File(nombre_archivo);
+                    if(!archivo.exists()){ // si el archivo ingresado no existe 
                             
                         try {
-                            
+                            archivo.createNewFile();
                             escribir = new FileWriter(archivo,true);
                             linea = new PrintWriter(escribir);
                             while(aux!=null){
@@ -369,9 +369,10 @@ public class Menu {
                             linea.println("Goles en contra: "+aux.getEquipo().getGolesEncontra());
                             linea.println("Diferencia de goles: "+aux.getEquipo().getDiferenci_goles());
                             linea.println("Puntos: "+aux.getEquipo().getPuntos());
-                            linea.println(separador);
+                            linea.println(".......................................................");
                             aux = aux.getSig();
                             }
+                            JOptionPane.showMessageDialog(null,"Ya se ha creado el archivo: "+nombre_archivo,"Mensaje",JOptionPane.INFORMATION_MESSAGE);   
                             linea.close();
                             escribir.close();
                         } catch (IOException ex) {
@@ -380,9 +381,28 @@ public class Menu {
                             
                        
                     }
-                    else{
-                        System.out.println("no entro");
-                    }
+                    else{ // es para agregar mas dato en dado caso el archivo ingresado ya exista 
+                         try {
+                        // ya no se necesita crear un archivo 
+                            escribir = new FileWriter(archivo,true);
+                            linea = new PrintWriter(escribir);
+                            while(aux!=null){
+                            linea.println("Nombre: "+aux.getEquipo().getNombre());
+                            linea.println("Goles a favor: "+aux.getEquipo().getGolesAfavor());
+                            linea.println("Goles en contra: "+aux.getEquipo().getGolesEncontra());
+                            linea.println("Diferencia de goles: "+aux.getEquipo().getDiferenci_goles());
+                            linea.println("Puntos: "+aux.getEquipo().getPuntos());
+                            linea.println(".......................................................");
+                            aux = aux.getSig();
+                            }
+                            JOptionPane.showMessageDialog(null,"Ya se han agregado las modificaciones al archivo: "+nombre_archivo,"Mensaje",JOptionPane.INFORMATION_MESSAGE);   
+                            linea.close();
+                            escribir.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                      
+                    }// fin else
                     
                 }
                 else{
