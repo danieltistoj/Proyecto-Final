@@ -360,18 +360,10 @@ public class Menu {
                     if(!archivo.exists()){ // si el archivo ingresado no existe 
                             
                         try {
-                            archivo.createNewFile();
+                            archivo.createNewFile(); // se crea el acrchivo 
                             escribir = new FileWriter(archivo,true);
                             linea = new PrintWriter(escribir);
-                            while(aux!=null){
-                            linea.println("Nombre: "+aux.getEquipo().getNombre());
-                            linea.println("Goles a favor: "+aux.getEquipo().getGolesAfavor());
-                            linea.println("Goles en contra: "+aux.getEquipo().getGolesEncontra());
-                            linea.println("Diferencia de goles: "+aux.getEquipo().getDiferenci_goles());
-                            linea.println("Puntos: "+aux.getEquipo().getPuntos());
-                            linea.println(".......................................................");
-                            aux = aux.getSig();
-                            }
+                            linea = arbol.Orndar_In2(linea);// se retorna la linea ya con las clasificaciones del arbol
                             JOptionPane.showMessageDialog(null,"Ya se ha creado el archivo: "+nombre_archivo,"Mensaje",JOptionPane.INFORMATION_MESSAGE);   
                             linea.close();
                             escribir.close();
@@ -386,15 +378,7 @@ public class Menu {
                         // ya no se necesita crear un archivo 
                             escribir = new FileWriter(archivo,true);
                             linea = new PrintWriter(escribir);
-                            while(aux!=null){
-                            linea.println("Nombre: "+aux.getEquipo().getNombre());
-                            linea.println("Goles a favor: "+aux.getEquipo().getGolesAfavor());
-                            linea.println("Goles en contra: "+aux.getEquipo().getGolesEncontra());
-                            linea.println("Diferencia de goles: "+aux.getEquipo().getDiferenci_goles());
-                            linea.println("Puntos: "+aux.getEquipo().getPuntos());
-                            linea.println(".......................................................");
-                            aux = aux.getSig();
-                            }
+                            linea = arbol.Orndar_In2(linea);// se retorna la linea ya con las clasificaciones del arbol
                             JOptionPane.showMessageDialog(null,"Ya se han agregado las modificaciones al archivo: "+nombre_archivo,"Mensaje",JOptionPane.INFORMATION_MESSAGE);   
                             linea.close();
                             escribir.close();

@@ -5,6 +5,7 @@
  */
 package liga.de.futbol;
 
+import java.io.PrintWriter;
 import javax.swing.DefaultListModel;
 
 /**
@@ -43,6 +44,11 @@ public class Arbol {
                 if(equipo.getDiferenci_goles()<nodo.getEquipo().getDiferenci_goles()){//si la diferencia de goles es menor al nodo actual entra como menor
                 nodo.setHijo_izq(Agregar(nodo.getHijo_izq(),equipo));
                 nodo.setAltura(nodo.getAltura()+1);
+                }
+                if(equipo.getDiferenci_goles()==nodo.getEquipo().getDiferenci_goles()){// si la diferencia de goles es igual se coloca como un numero menor o se ingresa como menor 
+                nodo.setHijo_izq(Agregar(nodo.getHijo_izq(),equipo));
+                nodo.setAltura(nodo.getAltura()+1);
+
                 }
             }
             //equipo entrante menor al nodo actual
@@ -147,6 +153,12 @@ public class Arbol {
        return modelo;
     }
     
+    public  PrintWriter Orndar_In2( PrintWriter linea){ // esta fucion se utiliza para guardar los datos de la clasificacion en un archivo txt
+        Nodo aux = raiz;
+        Inorden2(aux,linea);
+        return linea;
+    }
+    
     private void Preorden(Nodo nodo_raiz){
         if(nodo_raiz!=null){
             cadena+=nodo_raiz.getEquipo().getNombre()+" ";
@@ -176,6 +188,21 @@ public class Arbol {
         }
         
     }
+    
+    private void Inorden2(Nodo nodo_raiz, PrintWriter linea){// metodo para agregar a cada linea del archivo cada dato 
+          if(nodo_raiz!=null){
+            Inorden2(nodo_raiz.getHijo_der(),linea);
+            linea.println("Nombre: "+nodo_raiz.getEquipo().getNombre());
+            linea.println("Goles a favor: "+nodo_raiz.getEquipo().getGolesAfavor());
+            linea.println("Goles en contra: "+nodo_raiz.getEquipo().getGolesEncontra());
+            linea.println("Diferencia de goles: "+nodo_raiz.getEquipo().getDiferenci_goles());
+            linea.println("Puntos: "+nodo_raiz.getEquipo().getPuntos());
+            linea.println("...................................................................");
+            Inorden2(nodo_raiz.getHijo_izq(),linea);
+        }
+    }
+    
+    
     public void Altura(Nodo actual, int altura){
         if(actual!=null){
             Altura(actual.getHijo_izq(), altura+1);
