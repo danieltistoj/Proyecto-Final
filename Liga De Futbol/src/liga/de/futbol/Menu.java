@@ -7,6 +7,15 @@ package liga.de.futbol;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+//import java.io.File;
+//import java.io.FileWriter;
+//import java.io.IOException;
+//import java.io.PrintWriter;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 import javax.swing.DefaultListModel;
@@ -23,6 +32,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import jdk.jfr.events.FileWriteEvent;
 
 /**
  *
@@ -339,6 +349,45 @@ public class Menu {
        guardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Tabla_hecha){
+                    System.out.println("entro");
+                    Nodo aux = lista_eqp1.getTope();
+                    File archivo;
+                    FileWriter escribir;
+                    PrintWriter linea;
+                    String nombre = "", golesA = "", golesE = "", DifeG = "", puntos = "", separador = "........................................";
+                    archivo = new File("usuario.txt");
+                    if(!archivo.exists()){
+                            
+                        try {
+                            
+                            escribir = new FileWriter(archivo,true);
+                            linea = new PrintWriter(escribir);
+                            while(aux!=null){
+                            linea.println("Nombre: "+aux.getEquipo().getNombre());
+                            linea.println("Goles a favor: "+aux.getEquipo().getGolesAfavor());
+                            linea.println("Goles en contra: "+aux.getEquipo().getGolesEncontra());
+                            linea.println("Diferencia de goles: "+aux.getEquipo().getDiferenci_goles());
+                            linea.println("Puntos: "+aux.getEquipo().getPuntos());
+                            linea.println(separador);
+                            aux = aux.getSig();
+                            }
+                            linea.close();
+                            escribir.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                            
+                       
+                    }
+                    else{
+                        System.out.println("no entro");
+                    }
+                    
+                }
+                else{
+                JOptionPane.showMessageDialog(null,"No se han generado resultados","Error",JOptionPane.ERROR_MESSAGE); 
+                }
                
             }
         });
@@ -405,7 +454,7 @@ public class Menu {
              }
             }
         });
-       
+       // ingresar los equipos al arbol y luego de ingresarlos los muestra en un recorrido inorden en donde se recorre primero la rama derecha
        Mostrar_ClsG.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -413,20 +462,20 @@ public class Menu {
                     JOptionPane.showMessageDialog(null,"No hay equipos en el sistema","Error",JOptionPane.ERROR_MESSAGE);  
                 }
                 else{
-                     ClasGeneral.setVisible(true);
+                     ClasGeneral.setVisible(true); // se hace visible el dialog de la clasificacion general 
               
                     if(lista_partidos.Vacia()!=true){
                         if(contador_jornadas==jornada2&&Tabla_hecha==false){
-                        Nodo aux = lista_eqp1.getTope();
-                        while(aux!=null){
-                            aux.getEquipo().DiferenciaGoles();
-                            arbol.Insertar(aux.getEquipo());
-                            aux = aux.getSig();
+                        Nodo aux = lista_eqp1.getTope(); // se pasa la lista de equipos a un nodo auxiliar 
+                        while(aux!=null){ // el ciclo se repite hasta que el aux sea igual a null
+                            aux.getEquipo().DiferenciaGoles(); // se acude al metodo Direncia de goles para encontrar este dato que se encuentra dentro la clase Equipo
+                            arbol.Insertar(aux.getEquipo()); // se inserta el objeto equipo del nodo en el arbol, luego el arbol se encarga de ingresarlo en un nuevo nodo
+                            aux = aux.getSig();// se pasa al nodo siguiente 
                         }
                       Tabla_hecha = true;
-                      modelo3=arbol.Ordenar_In(modelo3);
-                      lista3.setModel(modelo3);
-                      panel_clasificacion.repaint();
+                      modelo3=arbol.Ordenar_In(modelo3);// se ingresan todos los datos en el modelo 
+                      lista3.setModel(modelo3); // se ingresa el modelo en la lista 
+                      panel_clasificacion.repaint();// se repinta el panel de la ventana de clasificacion
                         }
                      
                        
@@ -495,23 +544,23 @@ public class Menu {
    
     public void FormarPartidos(){//funcion que genera los partidos que se llevaran 
         if(lista_partidos.Vacia()){
-        Nodo aux = lista_eqp1.getTope(), aux2;
-        while(aux!=null){
-            aux2 = aux.getSig();
-            while(aux2!=null){
-                Partido nuevo_partido = new Partido();
-                nuevo_partido.setEqp1(aux);
-                nuevo_partido.setEqp2(aux2);
-                Nodo nodo_partido = new Nodo();
-                nodo_partido.setPartido(nuevo_partido);
-                lista_partidos.InsertarFondo(nodo_partido);
-                aux2 = aux2.getSig();
+        Nodo aux = lista_eqp1.getTope(), aux2; // se pasa la lista de partidos a un nodo auxiliar 
+        while(aux!=null){ 
+            aux2 = aux.getSig(); // se hace otro nodo axiliar para el nodo siguiente del nodo inicial aux 
+            while(aux2!=null){ 
+                Partido nuevo_partido = new Partido(); // se crea un nuevo objeto Partido para ingresar los equipos que van a juagar el partido 
+                nuevo_partido.setEqp1(aux);// se ingresa el equipo pivote como equipo 1
+                nuevo_partido.setEqp2(aux2); // y los siguiente equipos como equipo 2
+                Nodo nodo_partido = new Nodo(); // creamos un nodo partido para ingresar el objeto partido 
+                nodo_partido.setPartido(nuevo_partido); // ingresamos el objeto partido en el nodo
+                lista_partidos.InsertarFondo(nodo_partido); // ingresamos el nodo en la lista de los partidos 
+                aux2 = aux2.getSig(); // se pasa al siguinete nodo de aux2
                 
                 
             }
-            aux = aux.getSig(); 
+            aux = aux.getSig(); // se cambia de pivote que sera el siguiente elemento 
         }
-     auxiiar = lista_partidos.getTope();
+     auxiiar = lista_partidos.getTope(); // ahora el auxiliar global va a hacer igual a la lista partidos ya que va hacer igual al tope de la lista 
      JOptionPane.showMessageDialog(null,"Partidos Generados","Mensaje",JOptionPane.INFORMATION_MESSAGE); 
     }
         else{
@@ -519,7 +568,7 @@ public class Menu {
         }
         
     }
-    
+    // encontrar el factorial de un numero 
     public int  factorial (int numero) {
         int factorial =1;
   for(int i =1; i<=numero; i++){
