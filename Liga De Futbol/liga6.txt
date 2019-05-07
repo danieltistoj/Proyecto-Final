@@ -1,0 +1,24 @@
+Nombre: C
+Goles a favor: 11
+Goles en contra: 6
+Diferencia de goles: 5
+Puntos: 9
+...................................................................
+Nombre: A
+Goles a favor: 10
+Goles en contra: 9
+Diferencia de goles: 1
+Puntos: 4
+...................................................................
+Nombre: B
+Goles a favor: 8
+Goles en contra: 10
+Diferencia de goles: -2
+Puntos: 3
+...................................................................
+Nombre: D
+Goles a favor: 7
+Goles en contra: 11
+Diferencia de goles: -4
+Puntos: 1
+...................................................................

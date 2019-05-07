@@ -5,6 +5,7 @@
  */
 package liga.de.futbol;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -45,13 +46,14 @@ public class Menu {
     private JLabel fondo_panel;
     private JFrame ventana;
     private JDialog ResultadoJornada,ListaEquipos,ClasGeneral;
-    private JPanel panel, panel2, panel_listaEqp,panel_clasificacion;
+    private JPanel  panel2, panel_listaEqp,panel_clasificacion;
     private DefaultListModel modelo, modelo2, modelo3;//declaramos el Modelo
     private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA, guardar;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
     private Nodo auxiiar;
     private Arbol arbol;
+    private Panel panel;
     private int jornada=1, PartidosPorJornada, ComPrt, jornada2, contador_jornadas=0,puntos_ganar,puntos_perder,puntos_empate;
     
     public Menu(){
@@ -180,7 +182,9 @@ public class Menu {
         
         // FIN BOTOS PRINCIPALES
         
-        panel = new JPanel();
+        panel = new Panel();
+        
+        
         panel.setBounds(0, 0, 700, 600);
         panel.setLayout(null);
         panel.setVisible(true);
@@ -190,12 +194,13 @@ public class Menu {
         panel.add(Mostrar_ClsG);
        
         
+        
         ventana = new JFrame("Liga De Futbol");
         ventana.setSize(700, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLocationRelativeTo(null);
-        ventana.setLayout(null);
-        ventana.setResizable(false);
+        //ventana.setLayout(null);
+       // ventana.setResizable(false);
         
         Parametro_prog.addActionListener(new ActionListener() {
             @Override
