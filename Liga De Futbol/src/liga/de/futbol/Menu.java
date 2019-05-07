@@ -48,7 +48,7 @@ public class Menu {
     private JDialog ResultadoJornada,ListaEquipos,ClasGeneral;
     private JPanel  panel2, panel_listaEqp,panel_clasificacion;
     private DefaultListModel modelo, modelo2, modelo3;//declaramos el Modelo
-    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA, guardar;
+    private JButton Parametro_prog, Ingreso_eqp, Ingreso_resul,Mostrar_ClsG,Configurar, Generar_partidos, Otros,Lista_eqp,Gresultados, AsgPuntos,GresultadosA, guardar, cargar;
     private int Canti_eqp=0;
     private Lista lista_eqp1, lista_partidos;
     private Nodo auxiiar;
@@ -96,6 +96,9 @@ public class Menu {
         //boton para generar los resultados de los partidos de cada jornada
         guardar  = new JButton("Guardar");
         guardar.setBounds(400, 390, 225,30 );
+        
+        cargar = new JButton("Cargar");
+        cargar.setBounds(400,450,225,30);
         
         Gresultados = new JButton("Resultados automatico");
         Gresultados.setBounds(350,0, 170,30);
@@ -185,7 +188,7 @@ public class Menu {
         panel = new Panel();
         
         
-        panel.setBounds(0, 0, 700, 600);
+        panel.setBounds(0, 0, 700, 720);
         panel.setLayout(null);
         panel.setVisible(true);
         panel.add(Parametro_prog);
@@ -196,7 +199,7 @@ public class Menu {
         
         
         ventana = new JFrame("Liga De Futbol");
-        ventana.setSize(700, 650);
+        ventana.setSize(700, 720);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLocationRelativeTo(null);
         //ventana.setLayout(null);
@@ -401,6 +404,14 @@ public class Menu {
             }
         });
        //fin boton guardar
+       //boton cargar 
+       cargar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+       //fin del boton cargar
        Ingreso_resul.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -504,12 +515,13 @@ public class Menu {
     public void DesplegarBotonesOtros(){
       if(next_boton2==false){
                    next_boton2 = true;
-                   Ingreso_eqp.setBounds(200, 450, 225, 30);
-                   Ingreso_resul.setBounds(200,510, 225, 30);
-                   Mostrar_ClsG.setBounds(200,570 , 225, 30);
+                   Ingreso_eqp.setBounds(200, 510, 225, 30);
+                   Ingreso_resul.setBounds(200,570, 225, 30);
+                   Mostrar_ClsG.setBounds(200,630 , 225, 30);
                    
                      panel.add(Lista_eqp);
                      panel.add(guardar);
+                     panel.add(cargar);
                      panel.repaint();
                     
                 }
@@ -518,6 +530,7 @@ public class Menu {
                    
                    panel.remove(Lista_eqp);
                    panel.remove(guardar);
+                   panel.remove(cargar);
                    Ingreso_eqp.setBounds(200, 330, 225, 30);
                    Ingreso_resul.setBounds(200, 390, 225, 30);
                    Mostrar_ClsG.setBounds(200, 450, 225, 30);
