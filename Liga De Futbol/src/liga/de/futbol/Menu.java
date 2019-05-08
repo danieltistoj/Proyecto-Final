@@ -408,6 +408,51 @@ public class Menu {
        cargar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int conta =1;
+                File archivo;
+                FileReader leer;
+                String cadena,nombre = "",GolesA, GolesE, Diferencia, Puntos;
+                String nombre_archivo = JOptionPane.showInputDialog(null, "Ingrese el nombre del archivo");
+                BufferedReader almacenamiento;
+                archivo = new File(nombre_archivo);
+                try {
+                    leer = new FileReader(archivo);
+                    almacenamiento = new BufferedReader(leer);
+                    cadena = "";
+                    while(cadena!=null){
+                        try {
+                            cadena = almacenamiento.readLine();
+                            nombre = cadena;
+                            cadena = almacenamiento.readLine();
+                            GolesA = cadena;
+                            cadena = almacenamiento.readLine();
+                            GolesE = cadena;
+                            cadena = almacenamiento.readLine();
+                            Diferencia = cadena;
+                            cadena = almacenamiento.readLine();
+                            Puntos = cadena;
+                            cadena = almacenamiento.readLine();
+                            if(cadena!=null){
+                               JOptionPane.showMessageDialog(null,nombre+"\n"+GolesA+"\n"
+                                       +GolesE+"\n"+Diferencia+"\n"+Puntos
+                                       ,"Equipo: "+conta,JOptionPane.INFORMATION_MESSAGE);
+                               conta++;
+                            }
+                            
+                        } catch (IOException ex) {
+                            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }// fin del while
+                    try {
+                        almacenamiento.close();
+                        leer.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                        
                 
             }
         });
